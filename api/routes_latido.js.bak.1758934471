@@ -1,0 +1,40 @@
+import express from 'express';
+import db from './db.js';
+import { requireApiKey } from './middleware_apiKey.js';
+import { requireJwt } from './middleware_auth.js';
+
+const router = express.Router();
+
+
+router.use(requireApiKey);
+
+router.post('/dispositivos/latido', requireApiKey, requireJwt, async (req, res) => {
+  const scopes = Array.isArray(req.auth?.scopes) ? req.auth.scopes : [];
+  if (!scopes.includes('devices:heartbeat')) return res.status(403).json({ error: 'insufficient_scope' });
+  const device_id = req.auth?.sub; if (!device_id) return res.status(400).json({ error: 'missing_sub' });
+
+  // upsert/actualiza último latido
+  const exists = await db('devices').where({ id: device_id }).first();
+  if (exists) {
+    await db('devices').where({ id: device_id }).update({ ultimo_latido: db.fn.now() });
+  } else {
+    await db('devices').insert({
+      id: device_id,
+      client_id: req.auth?.cid || 'unknown',
+      public_key: '{"kty":"OKP","crv":"Ed25519","x":"placeholder"}',
+      estado: 'activo',
+      ultimo_latido: db.fn.now()
+    });
+  }
+
+  await db('auditoria_eventos').insert({ device_id, tipo: 'latido', payload: { jti: req.auth?.jti || null } });
+
+  const estadoRow = await db('devices').select('estado').where({ id: device_id }).first();
+  res.json({
+    intervalo: 60,
+    renovar_desde: req.auth?.renew_from || null,
+    estado: estadoRow?.estado || 'activo'
+  });
+});
+
+export default router;

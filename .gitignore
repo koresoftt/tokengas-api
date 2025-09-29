@@ -1,0 +1,30 @@
+# 🔒 Secretos / configs locales
+.env
+*.env
+*.secret
+*.key
+
+# 🗄️ Datos locales
+dbdata/
+backups/
+images/
+*.tar
+*.sql
+*.dump
+
+# 🧰 Ruido de editor/SO
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# 🧩 Node (por si en algún momento agregas deps locales)
+**/node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# 🐳 Archivos de ejecución locales
+docker-compose.override.yml
+
+# Local compose override
+compose.override.yml

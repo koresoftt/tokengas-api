@@ -1,0 +1,26 @@
+# 🔒 Secretos
+.env
+*.env
+*.secret
+*.key
+
+# 🗄️ Datos locales pesados
+dbdata/
+backups/
+images/
+*.tar
+*.sql
+*.dump
+
+# 🧰 Ruido de VCS/editores
+.git
+.gitignore
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# 🧩 Node (por si acaso)
+**/node_modules/
+npm-debug.log*
+yarn-error.log*
