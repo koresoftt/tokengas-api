@@ -1,0 +1,19 @@
+name: ci
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-api:
+    name: Build API Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Build de la imagen usando api/Dockerfile (no requiere DB ni .env)
+      - name: Docker build (api)
+        run: docker build -t tokengas-api ./api
