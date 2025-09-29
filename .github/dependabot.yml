@@ -1,0 +1,16 @@
+version: 2
+updates:
+  # Actualiza actions del repo
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # Actualiza deps de Node en ./api
+  - package-ecosystem: "npm"
+    directory: "/api"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps(npm)"
