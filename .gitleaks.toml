@@ -1,0 +1,8 @@
+title = "Tokengas gitleaks config"
+
+[allowlist]
+paths = [
+  '''^\.env$''',
+  '''^dbdata/''',
+  '''^backups/'''
+]
