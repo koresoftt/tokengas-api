@@ -1,0 +1,42 @@
+openapi: 3.0.3
+info:
+  title: Tokengas API
+  version: 0.1.0
+servers:
+  - url: https://api.koresoft.mx
+  - url: http://localhost:3301
+components:
+  securitySchemes:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerJWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  /healthz:
+    get:
+      summary: Healthcheck
+      responses: { '200': { description: OK } }
+  /registro/desafio:
+    post:
+      security: [ { ApiKeyHeader: [] } ]
+      responses: { '200': { description: Nonce + challenge } }
+  /registro/validar:
+    post:
+      security: [ { ApiKeyHeader: [] } ]
+      responses: { '200': { description: JWT emitido } }
+  /v1/dispositivos/latido:
+    post:
+      security: [ { ApiKeyHeader: [], BearerJWT: [] } ]
+      responses: { '200': { description: OK } }
+  /v1/solicitudes/alta:
+    post:
+      security: [ { ApiKeyHeader: [], BearerJWT: [] } ]
+      responses: { '201': { description: Creada } }
+  /v1/admin/solicitudes:
+    get:
+      security: [ { ApiKeyHeader: [] } ]
+      responses: { '200': { description: Listado } }
